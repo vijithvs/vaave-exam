@@ -7,4 +7,9 @@ class ExaminationModel extends Database
     {
         return $this->select("SELECT * FROM questions ORDER BY id ASC LIMIT $limit");
     }
+
+     public function getTopics()
+    {
+        return $this->select("SELECT * FROM topics");
+    }
 }

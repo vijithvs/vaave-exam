@@ -1,10 +1,10 @@
 <template>
   <div class="home">
-    <div class="card col-md-4 offset-4 card-margin" v-for="(data,index) in products" :key="index">
-      <a :href="'examination?examId='+data.topicId">
+    <div class="card col-md-4 offset-4 card-margin" v-for="(data,index) in topics" :key="index">
+      <a style="text-decoration:none" :href="'examination?examId='+data.id">
         <div class="row">
           <div class="card-body">
-            <p class="card-text">{{data.productTitle}}</p>
+            <p class="card-text">{{data.topic}}</p>
           </div>
         </div>
       </a>
@@ -13,11 +13,13 @@
 </template>
 
 <script>
+  import axios from 'axios'
   export default {
     name: 'home',
     data () {
       return {
         msg: 'Welcome to Your Vue.js App',
+        topics: {},
         products:[
           {
             productTitle:"ABCN",
@@ -35,6 +37,18 @@
           }
         ]
       }
+    },
+    created() {
+      this.loadQuestions()
+    },
+    methods: {
+       async loadQuestions() {
+        let self = this
+      await axios.get('http://localhost:5000/examination/get-topics')
+      .then(function (response) {
+        self.topics = response.data
+    })
+      },
     }
   }
 </script>

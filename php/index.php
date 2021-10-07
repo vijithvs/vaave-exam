@@ -17,6 +17,12 @@ switch ($uri) {
     case '/examination/get-questions' :
         $objFeedController->getQuestions();
         break;
+    case '/examination/save-response' :
+        $objFeedController->saveResponse();
+        break;
+    case '/examination/get-topics' :
+        $objFeedController->getTopics();
+        break;
     default:
     http_response_code(404);
     require __DIR__ . '/views/404.php';
