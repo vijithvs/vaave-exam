@@ -8,22 +8,28 @@ class ExaminationController extends BaseController
     {
         $strErrorDesc = '';
         $requestMethod = $_SERVER["REQUEST_METHOD"];
-        $arrQueryStringParams = $this->getQueryStringParams();
+        $params = [];
+        foreach (explode('&', $_SERVER['QUERY_STRING']) as $chunk) {
+            $param = explode("=", $chunk);
+            if ($param) {
+                $params[urldecode($param[0])] = urldecode($param[1]);
+            }
+        }
         header('Access-Control-Allow-Origin: *');
         if (strtoupper($requestMethod) == 'GET') {
-            try {
-                $examinationModel = new ExaminationModel();
- 
-                $intLimit = 10;
-                if (isset($arrQueryStringParams['limit']) && $arrQueryStringParams['limit']) {
-                    $intLimit = $arrQueryStringParams['limit'];
+            //checking the id of the examination from the parameters
+            if(!empty($params['id'])) {
+                try {
+                    $examinationModel = new ExaminationModel();
+                    $arrUsers = $examinationModel->getQuestions($params['id']);
+                    $responseData = json_encode($arrUsers);
+                } catch (Error $e) {
+                    $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
+                    $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
                 }
- 
-                $arrUsers = $examinationModel->getQuestions($intLimit);
-                $responseData = json_encode($arrUsers);
-            } catch (Error $e) {
-                $strErrorDesc = $e->getMessage().'Something went wrong! Please contact support.';
-                $strErrorHeader = 'HTTP/1.1 500 Internal Server Error';
+            }else {
+                 $strErrorDesc = 'Missing Params';
+                 $strErrorHeader = 'HTTP/1.1 400 Request Params missing';
             }
         } else {
             $strErrorDesc = 'Method not supported';

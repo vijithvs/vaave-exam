@@ -7,11 +7,12 @@
   <v-list-item three-line>
     <v-list-item-content>
       <div class="text-overline mb-4">
-        Vaave Exam 2021
+        Vaave Exam 2021 
+        <p v-if="examStatus">(Correct Choice: {{questions[questionIndex].correct_choice}})</p>
       </div>
-      <v-list-item-title class="text-h5 mb-1" v-if="examStatus">
+      <h6 class="text-h5 mb-1" v-if="examStatus">
         {{ questions[questionIndex].question }}
-      </v-list-item-title>
+      </h6>
       <div class="ml-3">
         <v-radio-group v-model="radioGroup" v-if="examStatus">
           <v-radio
@@ -63,7 +64,8 @@
         questionIndex: 0,
         score: 0,
         examStatus:true,
-        storeResp: []
+        storeResp: [],
+        radioGroup: ''
       }
     },
     created() {
@@ -102,7 +104,6 @@
         if(selectedChoice == correctChoice) {
           this.score+=questionScore
         }
-        this.radioGroup = '';
         this.questionIndex++
 
         let examResp = {"QuestionId": questionId, "Choice": selectedChoice,"TotalScore":this.score}
@@ -120,6 +121,8 @@
             localStorage.setItem('questionIndex',-1)
             localStorage.removeItem('finalScore')
         }
+        this.radioGroup = '';
+
       },
       async saveAnswer(resp, topicId) {
           await axios.post('http://localhost:5000/examination/save-response?topicId='+topicId+'&resp='+resp)
