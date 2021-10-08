@@ -2,7 +2,7 @@
 class ExaminationController extends BaseController
 {
     /**
-     * "/examinations" Endpoint - Get list of examinations
+     * "/examinations" Endpoint
      */
     public function getQuestions()
     {
@@ -105,7 +105,6 @@ class ExaminationController extends BaseController
             $strErrorDesc = 'Method not supported';
             $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
         }
- 
         // send output
         if (!$strErrorDesc) {
             $this->sendOutput(
@@ -129,8 +128,6 @@ class ExaminationController extends BaseController
         if (strtoupper($requestMethod) == 'GET') {
             try {
                 $examinationModel = new ExaminationModel();
- 
- 
                 $arrUsers = $examinationModel->getTopics();
                 $responseData = json_encode($arrUsers);
             } catch (Error $e) {
@@ -141,7 +138,6 @@ class ExaminationController extends BaseController
             $strErrorDesc = 'Method not supported';
             $strErrorHeader = 'HTTP/1.1 422 Unprocessable Entity';
         }
- 
         // send output
         if (!$strErrorDesc) {
             $this->sendOutput(
