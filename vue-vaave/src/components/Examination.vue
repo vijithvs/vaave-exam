@@ -88,7 +88,7 @@
       },
       //redirect to home page to restart the exam
       restartExam() {
-        this.$router.push('/') 
+        this.$router.push('/home') 
       },
       getNextQuestion() {
         let selectedChoice = this.radioGroup;
@@ -97,6 +97,7 @@
         let questionScore = this.questions[qIndex].score
         let questionId = this.questions[qIndex].id
         let resParams = ''
+        let topicId = this.examId
 
         if(selectedChoice == correctChoice) {
           this.score+=questionScore
@@ -112,7 +113,7 @@
         localStorage.setItem('finalScore',this.score)
         if(!this.questions[this.questionIndex]) {
             resParams = localStorage.getItem('examResp')
-            this.saveAnswer(resParams)
+            this.saveAnswer(resParams, topicId)
             this.examStatus = false
             //flusing values in the local storage
             localStorage.removeItem('examResp')
@@ -120,8 +121,8 @@
             localStorage.removeItem('finalScore')
         }
       },
-      async saveAnswer(params) {
-          await axios.post('http://localhost:5000/examination/save-response',params)
+      async saveAnswer(resp, topicId) {
+          await axios.post('http://localhost:5000/examination/save-response?topicId='+topicId+'&resp='+resp)
             .then(function (response) {
               // self.questions = response.data;
               console.log(response)
