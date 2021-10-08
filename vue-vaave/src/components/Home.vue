@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <div class="card col-md-4 offset-4 card-margin" v-for="(data,index) in topics" :key="index">
-      <a style="text-decoration:none" :href="'examination?examId='+data.id">
+      <a style="text-decoration:none"  @click="rExamination(data)">
         <div class="row">
-          <div class="card-body">
+          <div class="card-body" style="text-align: center">
             <p class="card-text">{{data.topic}}</p>
           </div>
         </div>
@@ -49,6 +49,12 @@
         self.topics = response.data
     })
       },
+      rExamination(data) {
+        this.$router.push('examination?examId='+data.id) 
+         localStorage.removeItem('examResp')
+          localStorage.removeItem('questionIndex')
+          localStorage.removeItem('finalScore')
+      }
     }
   }
 </script>
